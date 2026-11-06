@@ -1,6 +1,5 @@
 using System.Data;
 using KodaStore.Api.Models;
-using KodaStore.Api.Services;
 using Microsoft.Data.SqlClient;
 
 namespace KodaStore.Api.Repositories;
@@ -26,6 +25,7 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         await using var command = new SqlCommand(sql, connection);
 
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
         while (await reader.ReadAsync(cancellationToken))
         {
             products.Add(ReadProduct(reader));
@@ -44,9 +44,13 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         await using var connection = new SqlConnection(_connetionString);
 
         await connection.OpenAsync(cancellationToken);
+
         await using var command = new SqlCommand(sql, connection);
+
         AddProductCode(command, productCode);
+
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
         if (!await reader.ReadAsync(cancellationToken))
         {
             return null;
@@ -62,8 +66,11 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
             VALUES (@customerId, @productCode, @name, @price, @stock, @category);
         """;
         await using var connection = new SqlConnection(_connetionString);
+
         await connection.OpenAsync(cancellationToken);
+
         await using var command = new SqlCommand(sql, connection);
+
         AddProductParameter(command, product);
 
         try
@@ -75,10 +82,6 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         {
             return false;
         }
-        catch (SqlException e) when (e.Number == 547)
-        {
-            throw new ArgumentException("The specified customer does not exist.", nameof(product.CustomerId), e);
-        }
     }
 
     public async Task<bool> TryDeleteAsync(string productCode, CancellationToken cancellationToken)
@@ -89,10 +92,15 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         """;
 
         await using var connection = new SqlConnection(_connetionString);
+
         await connection.OpenAsync(cancellationToken);
+
         await using var command = new SqlCommand(sql, connection);
+
         AddProductCode(command, productCode);
+
         var affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
+
         return affectedRows == 1;
 
     }
@@ -112,18 +120,16 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         """;
 
         await using var connection = new SqlConnection(_connetionString);
+
         await connection.OpenAsync(cancellationToken);
+
         await using var command = new SqlCommand(sql, connection);
+
         AddProductParameter(command, product);
-        try
-        {
-            var affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
-            return affectedRows == 1;
-        }
-        catch (SqlException e) when (e.Number == 547)
-        {
-            throw new ArgumentException("The specified customer does not exist.", nameof(product.CustomerId), e);
-        }
+
+        var affectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
+
+        return affectedRows == 1;
     }
 
     // METHOD
@@ -135,11 +141,15 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
     private static void AddProductParameter(SqlCommand command, Product product)
     {
         command.Parameters.Add("@customerId", SqlDbType.Int).Value = product.CustomerId;
+
         AddProductCode(command, product.ProductCode);
+
         command.Parameters.Add("@name", SqlDbType.NVarChar, 120).Value = product.Name;
+
         command.Parameters.Add("@stock", SqlDbType.Int).Value = product.Stock;
 
         var price = command.Parameters.Add("@price", SqlDbType.BigInt);
+
         command.Parameters.Add("@category", SqlDbType.Text, 80).Value = product.Category;
 
         price.Precision = 18;

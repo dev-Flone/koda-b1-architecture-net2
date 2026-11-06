@@ -1,3 +1,4 @@
+using KodaStore.Api.Middlewares;
 using KodaStore.Api.Repositories;
 using KodaStore.Api.Services;
 
@@ -8,8 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddProblemDetails();
-
+builder.Services.AddProblemDetails(
+    option =>
+    {
+        option.CustomizeProblemDetails = context =>
+        {
+            context.ProblemDetails.Instance ??= context.HttpContext.Request.Path.Value;
+            context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+        };
+    }
+);
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Repository
 builder.Services.AddScoped<IProductRepository, SqlProductRepository>();

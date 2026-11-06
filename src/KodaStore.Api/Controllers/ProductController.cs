@@ -11,6 +11,7 @@ public sealed class ProductController(IProductService service) : ControllerBase
 {
     private readonly IProductService _service = service;
 
+    // GET ALL
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<ProductResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<ProductResponse>>> GetAll(CancellationToken cancellationToken)
@@ -19,6 +20,7 @@ public sealed class ProductController(IProductService service) : ControllerBase
         return Ok(products);
     }
 
+    // Get by ProductCode
     [HttpGet("{productCode}")]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -29,6 +31,7 @@ public sealed class ProductController(IProductService service) : ControllerBase
         return product is null ? Problem(statusCode: StatusCodes.Status404NotFound, title: "Product not found") : Ok(product);
     }
 
+    // POST
     [HttpPost]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -51,6 +54,7 @@ public sealed class ProductController(IProductService service) : ControllerBase
         }
     }
 
+    // DELETE
     [HttpDelete("{productCode}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -63,6 +67,7 @@ public sealed class ProductController(IProductService service) : ControllerBase
                 detail: $"There is no product with code {productCode}");
     }
 
+    // UPDATE
     [HttpPut("{productCode}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
