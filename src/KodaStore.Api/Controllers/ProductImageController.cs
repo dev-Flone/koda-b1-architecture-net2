@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using KodaStore.Api.Files;
 using KodaStore.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,8 @@ namespace KodaStore.Api.Controllers;
 [Route("api/v1/products/{productCode}/image")]
 public sealed class ProductImageController : ControllerBase
 {
-    private const long MaxFileBytes = 5L * 1024 * 1024;
+    private const long MaxFileBytes = 15L * 1024 * 1024;
+    private const long MaxRequestBytes = 16L * 1024 * 1024;
 
     private IProductService _productService;
     private readonly IProductImageStorage _productImageStorage;
@@ -22,12 +22,12 @@ public sealed class ProductImageController : ControllerBase
 
     [HttpPost]
     [Consumes("multipart/form-data")]
-    [RequestSizeLimit(6_291_456)]
-    [RequestFormLimits(MultipartBodyLengthLimit = 6_291_456)]
+    [RequestSizeLimit(MaxRequestBytes)]
+    [RequestFormLimits(MultipartBodyLengthLimit = MaxRequestBytes)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Upload([FromRoute] string productCode, [FromForm] IFormFile? file, CancellationToken cancellationToken)
+    public async Task<ActionResult> Upload([FromRoute] string productCode, IFormFile? file, CancellationToken cancellationToken)
     {
         var safeCode = productCode.Trim().ToUpperInvariant();
 

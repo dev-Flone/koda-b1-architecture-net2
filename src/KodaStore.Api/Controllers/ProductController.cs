@@ -20,6 +20,61 @@ public sealed class ProductController(IProductService service) : ControllerBase
         return Ok(products);
     }
 
+    // GET Active Product
+    [HttpGet("active")]
+    public async Task<IActionResult> GetActiveProducts(CancellationToken cancellationToken)
+    {
+        var products = await _service.GetActivateProductAsync(cancellationToken);
+
+        return Ok(products);
+    }
+
+    // Activate Product
+    [HttpPatch("{productCode}/activate")]
+    public async Task<IActionResult> Activate(string productCode, CancellationToken cancellationToken)
+    {
+        var success = await _service.ActivateAsync(productCode, cancellationToken);
+
+        if (!success)
+        {
+            return NotFound(new
+            {
+                message = $"Product '{productCode}' not found."
+            });
+        }
+        return Ok(new
+        {
+            message = $"Product '{productCode}' has been activated."
+        });
+    }
+
+    // Deactivate Product
+    [HttpPatch("{productCode}/deactivate")]
+    public async Task<IActionResult> Deactivate(
+    string productCode,
+    CancellationToken cancellationToken)
+    {
+        Console.WriteLine("CONTROLLER TERPANGGIL: " + productCode);
+
+        var success = await _service.DeactivateAsync(
+            productCode,
+            cancellationToken
+        );
+
+        if (!success)
+        {
+            return NotFound(new
+            {
+                message = $"Product '{productCode}' not found."
+            });
+        }
+
+        return Ok(new
+        {
+            message = $"Product '{productCode}' has been deactivated."
+        });
+    }
+
     // Get by ProductCode
     [HttpGet("{productCode}")]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]

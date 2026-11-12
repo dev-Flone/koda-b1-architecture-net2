@@ -38,7 +38,7 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         const string sql = """
             SELECT CustomerId, ProductCode, Name, Price, Stock, Category
             FROM dbo.Product
-            WHERE ProductCode = @productCode
+            WHERE ProductCode = @productCode;
         """;
 
         await using var connection = new SqlConnection(_connetionString);
@@ -169,5 +169,18 @@ public class SqlProductRepository(IConfiguration configuration) : IProductReposi
         );
     }
 
+    public Task<bool> ActivateAsync(string productCode, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 
+    public Task<bool> DeactivateAsync(string productCode, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Product>> GetActivateProductAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

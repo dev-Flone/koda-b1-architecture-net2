@@ -8,6 +8,11 @@ public sealed class ProductService(IProductRepository repository) : IProductServ
 {
     private readonly IProductRepository _repository = repository;
 
+    public async Task<bool> ActivateAsync(string productCode, CancellationToken cancellationToken)
+    {
+        return await _repository.ActivateAsync(productCode, cancellationToken);
+    }
+
     // CREATE
     public async Task<ProductResponse?> CreateAsync(ProductRequest request, CancellationToken cancellationToken)
     {
@@ -18,6 +23,11 @@ public sealed class ProductService(IProductRepository repository) : IProductServ
         return created ? ProductResponse.FromModel(product) : null;
     }
 
+    public async Task<bool> DeactivateAsync(string productCode, CancellationToken cancellationToken)
+    {
+        return await _repository.DeactivateAsync(productCode, cancellationToken);
+    }
+
     // DELETE
     public Task<bool> DeleteAsync(string productCode, CancellationToken cancellationToken)
     {
@@ -26,6 +36,11 @@ public sealed class ProductService(IProductRepository repository) : IProductServ
             return Task.FromResult(false);
         }
         return _repository.TryDeleteAsync(productCode, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Product>> GetActivateProductAsync(CancellationToken cancellationToken)
+    {
+        return await _repository.GetActivateProductAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<ProductResponse>> GetAllAsync(CancellationToken cancellationToken)
