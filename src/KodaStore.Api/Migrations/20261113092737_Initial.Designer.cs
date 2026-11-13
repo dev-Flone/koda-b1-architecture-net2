@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KodaStore.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261110055354_AddCustomerSeed")]
-    partial class AddCustomerSeed
+    [Migration("20261113092737_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,13 +147,19 @@ namespace KodaStore.Api.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeactivatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -175,7 +181,7 @@ namespace KodaStore.Api.Migrations
                     b.HasOne("KodaStore.Api.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("KodaStore.Api.Models.Product", "Product")

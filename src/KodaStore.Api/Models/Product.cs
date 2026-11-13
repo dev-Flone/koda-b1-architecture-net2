@@ -5,7 +5,7 @@ public sealed class Product
     public int CustomerId { get; private set; }
     public string ProductCode { get; private set; }
     public string Name { get; private set; }
-    public long Price { get; private set; }
+    public decimal Price { get; private set; }
     public int Stock { get; private set; }
     public string Category { get; private set; }
     public bool IsActive { get; private set; } = true;
@@ -13,7 +13,7 @@ public sealed class Product
     public Customer? Customer { get; private set; }
     public ICollection<OrderItem> OrderItems { get; private set; } = [];
 
-    public Product(int customerId, string productCode, string name, long price, int stock, string category)
+    public Product(int customerId, string productCode, string name, decimal price, int stock, string category)
     {
         if (customerId <= 0) throw new ArgumentOutOfRangeException(nameof(customerId), "Customer ID must be positive.");
 
@@ -36,7 +36,7 @@ public sealed class Product
         Category = category.Trim();
     }
 
-    public void UpdateDetail(int customerId, string productCode, string name, long price, int stock, string category)
+    public void UpdateDetail(int customerId, string productCode, string name, decimal price, int stock, string category)
     {
         var validated = new Product(customerId, productCode, name, price, stock, category);
 

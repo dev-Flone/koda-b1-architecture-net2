@@ -63,13 +63,19 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Repository
+// EfCore (SQL Server)
 builder.Services.AddScoped<IProductRepository, EfProductRepository>();
-// builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
+builder.Services.AddScoped<IOrderRepository, EfOrderRepository>();
+builder.Services.AddScoped<IProductQueryRepository, EfProductQueryRepository>();
+
+// Sql-Client
 builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
-builder.Services.AddScoped<IProductImageStorage, LocalProductImageStorage>();
+// builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
+// builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
+// builder.Services.AddScoped<IProductImageStorage, LocalProductImageStorage>();
 
 // Service
+builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 

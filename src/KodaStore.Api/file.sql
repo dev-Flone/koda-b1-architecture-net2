@@ -68,7 +68,6 @@ FROM   Orders;
 SELECT *
 FROM   OrderItem;
 
-
 -- DROP TABLE Customer;
 -- DROP TABLE Product;
 -- DROP TABLE Orders;
@@ -88,3 +87,13 @@ FROM   OrderItem;
 -- FROM   sys.tables
 -- WHERE  is_ms_shipped = 0;
 -- EXECUTE sp_executesql @sql;
+-- RESET
+DROP TABLE OrderItem;
+
+DROP TABLE Orders;
+
+DROP TABLE Product;
+
+DROP TABLE Customer;
+
+DROP TABLE __EFMigrationsHistory;

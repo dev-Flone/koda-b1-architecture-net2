@@ -155,8 +155,8 @@ namespace KodaStore.Api.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -178,7 +178,7 @@ namespace KodaStore.Api.Migrations
                     b.HasOne("KodaStore.Api.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("KodaStore.Api.Models.Product", "Product")

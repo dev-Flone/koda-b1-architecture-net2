@@ -8,26 +8,20 @@ public static class ProductSeedData
 {
     private static IEnumerable<Product> InitialProduct(int customerId)
     {
-        for (int i = 1; i <= 10; i++)
+        for (int i = 1; i <= 500; i++)
         {
-            string productCode = $"PR{i:D3}";
+            // Format kode menjadi P001, P002, ..., P500
+            string productCode = $"P{i:D3}";
             string productName = $"Product Dummy {i}";
 
-            long price = 15000L + (i * 1000L);
+            // Harga bervariasi (contoh: mulai dari 10.000)
+            decimal price = 10000m + (i * 1000m);
             int stock = 20;
 
-            string category = i % 3 == 0
-                ? "Elektronik"
-                : (i % 2 == 0) ? "Mouse" : "Screen";
+            // Kategori dibuat selang-seling antara 3 pilihan
+            string category = i % 3 == 0 ? "Elektronik" : (i % 2 == 0 ? "Mouse" : "Screen");
 
-            yield return new Product(
-                customerId,
-                productCode,
-                productName,
-                price,
-                stock,
-                category
-            );
+            yield return new Product(customerId, productCode, productName, price, stock, category);
         }
     }
 
