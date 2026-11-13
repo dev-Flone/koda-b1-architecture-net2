@@ -78,7 +78,8 @@ namespace KodaStore.Api.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("OrderDate");
+                    b.HasIndex("OrderNumber", "OrderDate", "Status")
+                        .HasDatabaseName("IX_Orders_OrderNumber_OrderDate_Status");
 
                     b.ToTable("Orders", "dbo", t =>
                         {
@@ -163,7 +164,8 @@ namespace KodaStore.Api.Migrations
 
                     b.HasKey("ProductCode");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId", "Price", "Category")
+                        .HasDatabaseName("IX_Products_CustomerId_Price_Category");
 
                     b.ToTable("Product", "dbo", t =>
                         {

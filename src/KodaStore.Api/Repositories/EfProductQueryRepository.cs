@@ -33,7 +33,8 @@ public sealed class EfProductQueryRepository(AppDbContext context) : IProductQue
             query = query.Where(p => p.Price == maxPrice);
         }
 
-        long TotalCount = await query.LongCountAsync(cancellationToken);
+        // long TotalCount = await query.LongCountAsync(cancellationToken);
+        long TotalCount = await query.TagWith("KodaStore.ProductSearch.Count").LongCountAsync(cancellationToken);
 
         IOrderedQueryable<Product> sorted = criteria.Sort switch
         {
@@ -53,7 +54,21 @@ public sealed class EfProductQueryRepository(AppDbContext context) : IProductQue
 
         int skip = (criteria.Page - 1) * criteria.PageSize;
 
-        ProductSearchItemResponse[] items = await sorted.Skip(skip).Take(criteria.PageSize).Select(p => new ProductSearchItemResponse(p.ProductCode, p.Name, p.Category, p.Price, p.Stock)).ToArrayAsync(cancellationToken);
+        var inspectQuery = sorted
+            .TagWith("KodaStore.ProductSearch.Page")
+            .Skip(skip)
+            .Take(criteria.PageSize)
+            .Select(p => new ProductSearchItemResponse(
+                p.ProductCode, p.Name, p.Category, p.Price, p.Stock
+            ));
+
+        string sqlPreview = inspectQuery.ToQueryString();
+
+        System.Diagnostics.Debug.WriteLine(sqlPreview);
+
+        var items = await inspectQuery.ToArrayAsync(cancellationToken);
+
+        // ProductSearchItemResponse[] items = await sorted.Skip(skip).Take(criteria.PageSize).Select(p => new ProductSearchItemResponse(p.ProductCode, p.Name, p.Category, p.Price, p.Stock)).ToArrayAsync(cancellationToken);
 
         long totalPages = (TotalCount / criteria.PageSize) + (TotalCount % criteria.PageSize == 0 ? 0 : 1);
 

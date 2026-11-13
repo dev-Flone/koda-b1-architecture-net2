@@ -31,6 +31,13 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.Property(p => p.Category).HasMaxLength(30).IsRequired();
 
             entity.HasOne(p => p.Customer).WithMany(c => c.Products).HasForeignKey(p => p.CustomerId).OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(p => new
+            {
+                p.CustomerId,
+                p.Price,
+                p.Category
+            }).HasDatabaseName("IX_Products_CustomerId_Price_Category");
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -44,7 +51,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.Property(c => c.Address).HasMaxLength(255).IsRequired();
 
             entity.Navigation(c => c.Products).HasField("_products").UsePropertyAccessMode(PropertyAccessMode.Field);
-
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -55,7 +61,13 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.Property(o => o.OrderNumber).HasMaxLength(35).IsRequired();
             entity.Property(o => o.OrderDate).HasColumnType("datetimeoffset").IsRequired();
             entity.Property(o => o.Status).HasMaxLength(20).IsRequired();
-            entity.HasIndex(o => o.OrderDate);
+
+            entity.HasIndex(o => new
+            {
+                o.OrderNumber,
+                o.OrderDate,
+                o.Status
+            }).HasDatabaseName("IX_Orders_OrderNumber_OrderDate_Status");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>

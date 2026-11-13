@@ -97,3 +97,13 @@ DROP TABLE Product;
 DROP TABLE Customer;
 
 DROP TABLE __EFMigrationsHistory;
+
+
+GO
+SELECT   i.name AS IndexName,
+         i.type_desc AS IndexType,
+         i.is_unique AS IsUnique
+FROM     sys.indexes AS i
+WHERE    i.object_id = OBJECT_ID(N'dbo.Product')
+         AND i.name IS NOT NULL
+ORDER BY i.name;

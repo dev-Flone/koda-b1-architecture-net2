@@ -17,7 +17,7 @@ GET {{baseUrl}}/api/v1/products/search?sort=stock_asc
 Accept: application/json
 
 ### TEST 5 - Pagination
-GET {{baseUrl}}/api/v1/products/search?page=2&pageSize=10&sort=price_desc&maxPrice=400000
+GET {{baseUrl}}/api/v1/products/search?page=1&pageSize=5&sort=price_desc&maxPrice=400000
 Accept: application/json
 
 ### TEST 5 - Pagination tidak valid
