@@ -10,8 +10,8 @@ public static class OrderSeedData
     {
         if (context.Set<Order>().Any(o => o.OrderNumber == DemoOrderNumber)) return;
 
-        var keyboard = context.Set<Product>().Single(p => p.ProductCode == "PR001");
-        var mouse = context.Set<Product>().Single(p => p.ProductCode == "PR002");
+        var keyboard = context.Set<Product>().Single(p => p.ProductCode == "P001");
+        var mouse = context.Set<Product>().Single(p => p.ProductCode == "P002");
 
         var order = new Order(DemoOrderNumber);
         order.AddItem(keyboard, 2);

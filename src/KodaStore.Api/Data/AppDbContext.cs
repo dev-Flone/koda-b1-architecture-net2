@@ -10,6 +10,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Category> Category => Set<Category>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +30,11 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.Property(p => p.Price).IsRequired();
             entity.Property(p => p.Stock).IsRequired();
             entity.Property(p => p.Category).HasMaxLength(30).IsRequired();
+            entity.Property(p => p.CategoryId).IsRequired(false);
+            entity.Property(p => p.RowVersion).IsRowVersion();
+
+            entity.HasOne(p => p.CategoryEntity).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasIndex(p => p.CategoryId);
 
             entity.HasOne(p => p.Customer).WithMany(c => c.Products).HasForeignKey(p => p.CustomerId).OnDelete(DeleteBehavior.Cascade);
 
@@ -96,6 +102,16 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
             entity.HasIndex(i => new { i.OrderId, i.ProductCode }).IsUnique();
             entity.HasIndex(i => i.ProductCode);
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.ToTable("Category", "dbo");
+            entity.HasKey(c => c.Id);
+            entity.Property(c => c.Id).ValueGeneratedOnAdd();
+
+            entity.Property(c => c.Name).HasMaxLength(30).IsRequired();
+            entity.HasIndex(c => c.Name).IsUnique();
         });
     }
 }

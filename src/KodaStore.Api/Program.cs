@@ -20,12 +20,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             CustomerSeedData.Seed(context);
             ProductSeedData.Seed(context);
             OrderSeedData.Seed(context);
+            CategorySeedData.Seed(context);
         })
         .UseAsyncSeeding(async (context, _, ct) =>
         {
             await CustomerSeedData.SeedAsync(context, ct);
             await ProductSeedData.SeedAsync(context, ct);
             await OrderSeedData.SeedAsync(context, ct);
+            await CategorySeedData.SeedAsync(context, ct);
         });
 });
 
@@ -70,6 +72,7 @@ builder.Services.AddScoped<IProductQueryRepository, EfProductQueryRepository>();
 
 // Sql-Client
 builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
+builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 // builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
 // builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
 // builder.Services.AddScoped<IProductImageStorage, LocalProductImageStorage>();
@@ -78,6 +81,7 @@ builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
 builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

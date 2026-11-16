@@ -167,3 +167,15 @@ C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\bin\Debug\net10.0\
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\bin\Debug\net10.0\KodaStore.Api.runtimeconfig.dev.json
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\HotReload\Microsoft.NET.Sdk.BlazorWeb.HotReload.lib.module.js
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\HotReload\Microsoft.NET.Sdk.BlazorWeb.HotReload.BrowserTools.js
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\HotReload\Microsoft.NET.Sdk.BlazorWeb.HotReload.BrowserTools.Config.js
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\HotReload\browser-tools-key.public.json
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\HotReload\browser-tools-key.private.json
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\jsmodules\jsmodules.build.manifest.json
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\scopedcss\scopedcss.cache
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\compressed\yh372t31m9-{0}-tchfgznwy8-tchfgznwy8.gz
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\compressed\28ygdpcswh-{0}-qu6qdvj97v-qu6qdvj97v.gz
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\compressed\6pn62kw06f-{0}-v1vy2to33n-v1vy2to33n.gz
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net10.0\compressed\kkh55l179m-{0}-ysew0n4kjn-ysew0n4kjn.gz

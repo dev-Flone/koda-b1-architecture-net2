@@ -68,6 +68,9 @@ FROM   Orders;
 SELECT *
 FROM   OrderItem;
 
+SELECT *
+FROM   Category;
+
 -- DROP TABLE Customer;
 -- DROP TABLE Product;
 -- DROP TABLE Orders;

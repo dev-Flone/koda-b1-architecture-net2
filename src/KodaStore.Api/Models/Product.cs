@@ -1,40 +1,27 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace KodaStore.Api.Models;
 
-public sealed class Product
+public sealed class Product(int customerId, string productCode, string name, decimal price, int stock, string category)
 {
-    public int CustomerId { get; private set; }
-    public string ProductCode { get; private set; }
-    public string Name { get; private set; }
-    public decimal Price { get; private set; }
-    public int Stock { get; private set; }
-    public string Category { get; private set; }
+    [Required]
+    public int CustomerId { get; private set; } = customerId;
+    [Required]
+    public string ProductCode { get; private set; } = productCode;
+    [Required]
+    public string Name { get; private set; } = name;
+    [Required, Range(10000, 1000000000)]
+    public decimal Price { get; private set; } = price;
+    [Required]
+    public int Stock { get; private set; } = stock;
+    public int? CategoryId { get; private set; } = null!;
     public bool IsActive { get; private set; } = true;
     public DateTime? DeactivatedAtUtc { get; private set; }
+    public string Category { get; private set; } = category;
+    public Category CategoryEntity { get; private set; } = null!;
+    public byte[] RowVersion { get; private set; } = [];
     public Customer? Customer { get; private set; }
     public ICollection<OrderItem> OrderItems { get; private set; } = [];
-
-    public Product(int customerId, string productCode, string name, decimal price, int stock, string category)
-    {
-        if (customerId <= 0) throw new ArgumentOutOfRangeException(nameof(customerId), "Customer ID must be positive.");
-
-        if (string.IsNullOrWhiteSpace(productCode) || productCode.Trim().Length > 30) throw new ArgumentException("Product code is required.", nameof(productCode));
-
-        if (string.IsNullOrWhiteSpace(name) || name.Trim().Length > 30) throw new ArgumentException("Name is required.", nameof(name));
-
-        if (price < 0) throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
-
-        if (stock < 0) throw new ArgumentException("Stock cannot be negative.", nameof(stock));
-
-        if (string.IsNullOrWhiteSpace(category) || category.Trim().Length > 30) throw new ArgumentException("Category is required.", nameof(category));
-
-
-        CustomerId = customerId;
-        ProductCode = productCode.Trim().ToUpperInvariant();
-        Name = name.Trim();
-        Price = price;
-        Stock = stock;
-        Category = category.Trim();
-    }
 
     public void UpdateDetail(int customerId, string productCode, string name, decimal price, int stock, string category)
     {
@@ -46,6 +33,16 @@ public sealed class Product
         Price = validated.Price;
         Stock = validated.Stock;
         Category = validated.Category;
+    }
+
+    public void AssignCategory(Category categoryEntity)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        if (categoryEntity.Id <= 0) throw new InvalidOperationException("Save category first to get CategoryId");
+
+        CategoryId = categoryEntity.Id;
+        CategoryEntity = categoryEntity;
+        Name = categoryEntity.Name;
     }
 
     public void Activate()
