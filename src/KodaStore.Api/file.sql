@@ -57,6 +57,26 @@ FROM   INFORMATION_SCHEMA.TABLES
 WHERE  TABLE_TYPE = 'BASE TABLE';
 
 SELECT *
+FROM   AspNetUsers;
+
+DELETE AspNetUsers;
+
+SELECT *
+FROM   AspNetUserLogins;
+
+SELECT *
+FROM   AspNetUserRoles;
+
+SELECT *
+FROM   AspNetUserTokens;
+
+SELECT *
+FROM   AspNetRoles;
+
+SELECT *
+FROM   AspNetRoleClaims;
+
+SELECT *
 FROM   Product;
 
 SELECT *
