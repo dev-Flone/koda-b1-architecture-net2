@@ -34,13 +34,12 @@ public static class DepedencyInjection
                  await OrderSeedData.SeedAsync(context, ct);
                  await CategorySeedData.SeedAsync(context, ct);
              });
-
-            services.AddScoped<IProductQueryService, ProductQueryService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IAuthService, IdentityAuthService>();
         });
+        services.AddScoped<IProductQueryService, ProductQueryService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IAuthService, IdentityAuthService>();
 
         services.AddIdentityCore<AppUser>(options =>
         {
@@ -57,7 +56,5 @@ public static class DepedencyInjection
         }).AddRoles<IdentityRole<Guid>>().AddEntityFrameworkStores<AppDbContext>();
 
         return services;
-
-
     }
 }
