@@ -1,11 +1,8 @@
-﻿using KodaStore.Infrastructure.Data;
-using KodaStore.Api.Middlewares;
+﻿using KodaStore.Api.Middlewares;
 using KodaStore.Application.Repositories;
-using KodaStore.Infrastructure.Seeding;
-using KodaStore.Application.Services;
-using Microsoft.EntityFrameworkCore;
 using KodaStore.Infrastructure.Repositories;
 using Scalar.AspNetCore;
+using KodaStore.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,35 +22,8 @@ builder.Services.AddCors(option =>
 builder.Services.AddOpenApi();
 
 // DbContext
-var connectionString = builder.Configuration.GetConnectionString("ecommercedb")
-        ?? throw new InvalidOperationException("ConnectionString : Not yet configured.");
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(connectionString)
-        .UseSeeding((context, _) =>
-        {
-            CustomerSeedData.Seed(context);
-            ProductSeedData.Seed(context);
-            OrderSeedData.Seed(context);
-            CategorySeedData.Seed(context);
-        })
-        .UseAsyncSeeding(async (context, _, ct) =>
-        {
-            await CustomerSeedData.SeedAsync(context, ct);
-            await ProductSeedData.SeedAsync(context, ct);
-            await OrderSeedData.SeedAsync(context, ct);
-            await CategorySeedData.SeedAsync(context, ct);
-        });
-});
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
-
 
 // Add services to the container.
 
@@ -92,13 +62,12 @@ builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 // builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
 // builder.Services.AddScoped<IProductImageStorage, LocalProductImageStorage>();
 
-// Service
-builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddInfrastructure(builder.Configuration);
 
+// Service
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

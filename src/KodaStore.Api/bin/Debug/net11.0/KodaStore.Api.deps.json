@@ -29,6 +29,18 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Identity.EntityFrameworkCore/11.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "11.0.0"
+        },
+        "runtime": {
+          "lib/net11.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.26.53018",
+            "localPath": "Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll"
+          }
+        }
+      },
       "Microsoft.AspNetCore.OpenApi/11.0.0": {
         "dependencies": {
           "Microsoft.OpenApi": "3.11.0"
@@ -872,6 +884,7 @@
       "KodaStore.Infrastructure/1.0.0": {
         "dependencies": {
           "KodaStore.Application": "1.0.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "11.0.0",
           "Microsoft.EntityFrameworkCore": "11.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "11.0.0"
         },
@@ -896,6 +909,13 @@
       "sha512": "sha512-yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw==",
       "path": "humanizer.core/3.0.10",
       "hashPath": "humanizer.core.3.0.10.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore/11.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bLVVop5J69qATJZVQZ+yxdHCEGpYD2xdwRB80zxhwu5YGZ72Axf4YfV2BMIFQo2Ta/sL/kebm3gZ2QyBkswMPQ==",
+      "path": "microsoft.aspnetcore.identity.entityframeworkcore/11.0.0",
+      "hashPath": "microsoft.aspnetcore.identity.entityframeworkcore.11.0.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.OpenApi/11.0.0": {
       "type": "package",

@@ -176,3 +176,4 @@ C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net11.0\
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net11.0\KodaStore.Api.pdb
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net11.0\KodaStore.Api.genruntimeconfig.cache
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\obj\Debug\net11.0\ref\KodaStore.Api.dll
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Api\bin\Debug\net11.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

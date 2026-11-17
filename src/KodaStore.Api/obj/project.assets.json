@@ -18,6 +18,22 @@
           "buildTransitive/Humanizer.Core.targets": {}
         }
       },
+      "Microsoft.AspNetCore.Identity.EntityFrameworkCore/11.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "11.0.0"
+        },
+        "compile": {
+          "lib/net11.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net11.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.OpenApi/11.0.0": {
         "type": "package",
         "dependencies": {
@@ -1005,6 +1021,7 @@
         "framework": ".NETCoreApp,Version=v11.0",
         "dependencies": {
           "KodaStore.Application": "1.0.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "11.0.0",
           "Microsoft.EntityFrameworkCore": "11.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "11.0.0"
         },
@@ -1040,6 +1057,22 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore/11.0.0": {
+      "sha512": "bLVVop5J69qATJZVQZ+yxdHCEGpYD2xdwRB80zxhwu5YGZ72Axf4YfV2BMIFQo2Ta/sL/kebm3gZ2QyBkswMPQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.identity.entityframeworkcore/11.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net11.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll",
+        "lib/net11.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.xml",
+        "microsoft.aspnetcore.identity.entityframeworkcore.11.0.0.nupkg.sha512",
+        "microsoft.aspnetcore.identity.entityframeworkcore.nuspec"
       ]
     },
     "Microsoft.AspNetCore.OpenApi/11.0.0": {
