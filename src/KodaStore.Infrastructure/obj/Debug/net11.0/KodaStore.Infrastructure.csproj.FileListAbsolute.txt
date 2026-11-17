@@ -1,9 +1,3 @@
-C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.csproj.AssemblyReference.cache
-C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.AssemblyInfoInputs.cache
-C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.AssemblyInfo.cs
-C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.sourcelink.json
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Debug\net11.0\KodaStore.Infrastructure.deps.json
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Debug\net11.0\KodaStore.Infrastructure.dll
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Debug\net11.0\KodaStore.Infrastructure.pdb
@@ -11,6 +5,12 @@ C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Deb
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Debug\net11.0\KodaStore.Domain.dll
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Debug\net11.0\KodaStore.Application.pdb
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\bin\Debug\net11.0\KodaStore.Domain.pdb
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.AssemblyInfo.cs
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.sourcelink.json
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStor.0BE24A8A.Up2Date
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\KodaStore.Infrastructure.dll
 C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Infrastructure\obj\Debug\net11.0\refint\KodaStore.Infrastructure.dll
