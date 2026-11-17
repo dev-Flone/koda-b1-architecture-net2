@@ -39,14 +39,14 @@ public sealed class AuthController(IAuthService authService) : ControllerBase
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(AuthUserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.LoginAsync(request, cancellationToken);
 
-        if (!result.Succeeded || result is null) return Unauthorized(new ProblemDetails
+        if (result is null || !result.Succeeded) return Unauthorized(new ProblemDetails
         {
             Status = StatusCodes.Status401Unauthorized,
             Title = "Invalid Access",
