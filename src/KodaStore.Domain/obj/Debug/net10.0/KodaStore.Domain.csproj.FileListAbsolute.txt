@@ -1,0 +1,13 @@
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\bin\Debug\net10.0\KodaStore.Domain.deps.json
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\bin\Debug\net10.0\KodaStore.Domain.dll
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\bin\Debug\net10.0\KodaStore.Domain.pdb
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.AssemblyInfoInputs.cache
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.AssemblyInfo.cs
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.sourcelink.json
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.dll
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\refint\KodaStore.Domain.dll
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStore.Domain.pdb
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\ref\KodaStore.Domain.dll
+C:\Users\Flone\Documents\Kodakademy\dotnet5\src\KodaStore.Domain\obj\Debug\net10.0\KodaStor.0897597B.Up2Date

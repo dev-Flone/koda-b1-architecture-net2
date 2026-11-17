@@ -1,6 +1,6 @@
-using KodaStore.Api.DTOs;
+﻿using KodaStore.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using KodaStore.Api.Services;
+using KodaStore.Application.Services;
 
 namespace KodaStore.Api.Controllers;
 

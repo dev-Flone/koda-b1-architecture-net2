@@ -1,12 +1,28 @@
-using KodaStore.Api.Data;
-using KodaStore.Api.Files;
+﻿using KodaStore.Infrastructure.Data;
 using KodaStore.Api.Middlewares;
-using KodaStore.Api.Repositories;
-using KodaStore.Api.Seeding;
-using KodaStore.Api.Services;
+using KodaStore.Application.Repositories;
+using KodaStore.Infrastructure.Seeding;
+using KodaStore.Application.Services;
 using Microsoft.EntityFrameworkCore;
+using KodaStore.Infrastructure.Repositories;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Membaca daftar origin di env.Development
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+// Register CORS Configuration
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("ReactClient", policy =>
+    {
+        policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
+// Scalar
+builder.Services.AddOpenApi();
 
 // DbContext
 var connectionString = builder.Configuration.GetConnectionString("ecommercedb")
@@ -33,7 +49,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
@@ -88,10 +103,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
     app.MapOpenApi();
-    app.MapGet("/", () => Results.Redirect("/swagger"));
+    app.MapScalarApiReference();
+    app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
 }
 else
 {
@@ -99,7 +113,9 @@ else
     app.UseHsts();
 }
 
-app.UseCors("AllowAll");
+app.UseMiddleware<RequestTiming>();
+
+app.UseCors("ReactClient");
 
 app.UseHttpsRedirection();
 
@@ -119,3 +135,4 @@ app.MapControllerRoute(
 app.UseAuthorization();
 
 app.Run();
+
