@@ -6,7 +6,7 @@ namespace KodaStore.Application.Repositories;
 public sealed class ProductQueryService(IProductQueryRepository repository) : IProductQueryService
 {
     private readonly IProductQueryRepository _repository = repository;
-    public Task<PagedResult<ProductSearchItemResponse>> SearchAsync(ProductSearchRequest request, CancellationToken cancellationToken)
+    public Task<PagedResult<ProductSearchItemResponse>> SearchAsync(ProductSearchRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 

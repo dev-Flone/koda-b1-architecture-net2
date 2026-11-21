@@ -11,7 +11,6 @@ public sealed class CustomerController(ICustomerService service) : ControllerBas
 {
     private readonly ICustomerService _service = service;
 
-    // GET ALL CUSTOMER
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<CustomerResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<CustomerResponse>>> GetAll(CancellationToken cancellationToken)
@@ -31,7 +30,6 @@ public sealed class CustomerController(ICustomerService service) : ControllerBas
         return customer is null ? Problem(statusCode: StatusCodes.Status404NotFound, title: "Customer not found.") : Ok(customer);
     }
 
-    // POST CUSTOMER
     [HttpPost]
     [ProducesResponseType(typeof(CustomerResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -54,7 +52,6 @@ public sealed class CustomerController(ICustomerService service) : ControllerBas
         }
     }
 
-    // DELETE CUSTOMER
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

@@ -16,7 +16,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261117070612_Identity";
+    public override string LastMigrationId => "20261121041010_JwtToken";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -231,7 +231,8 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.Property<string>("DisplayName")
                     .IsRequired()
-                    .HasColumnType("nvarchar(max)");
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
                 b.Property<string>("Email")
                     .HasMaxLength(256)
@@ -284,6 +285,47 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                 b.ToTable("AspNetUsers");
+            });
+
+        modelBuilder.Entity("KodaStore.Infrastructure.Identity.RefreshToken", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uniqueidentifier");
+
+                b.Property<DateTimeOffset>("CreatedAtUtc")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<DateTimeOffset>("ExpiresAtUtc")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<Guid>("FamilyId")
+                    .HasColumnType("uniqueidentifier");
+
+                b.Property<DateTimeOffset?>("RevokedAtUtc")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<string>("TokenHash")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .IsUnicode(false)
+                    .HasColumnType("varchar(64)");
+
+                b.Property<DateTimeOffset?>("UsedAtUtc")
+                    .HasColumnType("datetimeoffset");
+
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
+
+                b.HasKey("Id");
+
+                b.HasIndex("FamilyId");
+
+                b.HasIndex("TokenHash")
+                    .IsUnique();
+
+                b.HasIndex("UserId", "FamilyId");
+
+                b.ToTable("RefreshTokens", "dbo");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -452,6 +494,17 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("CategoryEntity");
 
                 b.Navigation("Customer");
+            });
+
+        modelBuilder.Entity("KodaStore.Infrastructure.Identity.RefreshToken", b =>
+            {
+                b.HasOne("KodaStore.Infrastructure.Identity.AppUser", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("User");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

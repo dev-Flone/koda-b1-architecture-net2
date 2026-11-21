@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:5188
+
+### LOGIN
+# @name login
+POST {{baseUrl}}/api/v1/auth/login
+Origin: http://localhost:5176
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "limit@gmail.com",
+    "password": "Qwe123!!"
+}
+
+### TEST ME
+GET {{baseUrl}}/api/v1/auth/me
+Accept: application/json 
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### REFRESH TOKEN
+POST {{baseUrl}}/api/v1/auth/refresh
+Origin: http://localhost:5188
+Cookie: koda_refresh=D04503FB36EE3D21DFC6B37896788F6DB27CF3C122C1CF5F8882E29EC1DD3F42
+Accept: application/json
+
+### LOGOUT
+POST {{baseUrl}}/api/v1/auth/logout
+Origin: http://localhost:5188
+Cookie: koda_refresh=D04503FB36EE3D21DFC6B37896788F6DB27CF3C122C1CF5F8882E29EC1DD3F42
+Accept: application/json

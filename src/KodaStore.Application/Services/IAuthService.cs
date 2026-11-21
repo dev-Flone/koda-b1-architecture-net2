@@ -5,6 +5,6 @@ namespace KodaStore.Application.Services;
 
 public interface IAuthService
 {
-    Task<RegisterResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken);
-    Task<LoginResult> LoginAsync(LoginRequest request, CancellationToken cancellationToken);
+    Task<RegisterResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default);
+    Task<LoginResult> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default);
 }

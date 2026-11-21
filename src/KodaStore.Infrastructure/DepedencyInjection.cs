@@ -2,6 +2,7 @@ using KodaStore.Application.Repositories;
 using KodaStore.Application.Services;
 using KodaStore.Infrastructure.Data;
 using KodaStore.Infrastructure.Identity;
+using KodaStore.Infrastructure.Repositories;
 using KodaStore.Infrastructure.Seeding;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,17 @@ public static class DepedencyInjection
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IAuthService, IdentityAuthService>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+
+
+
+        services.AddScoped<IProductRepository, EfProductRepository>();
+        services.AddScoped<IOrderRepository, EfOrderRepository>();
+        services.AddScoped<IProductQueryRepository, EfProductQueryRepository>();
+
+        services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
+        services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 
         services.AddIdentityCore<AppUser>(options =>
         {
@@ -54,6 +66,8 @@ public static class DepedencyInjection
 
             options.SignIn.RequireConfirmedEmail = true;
         }).AddRoles<IdentityRole<Guid>>().AddEntityFrameworkStores<AppDbContext>();
+
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
         return services;
     }

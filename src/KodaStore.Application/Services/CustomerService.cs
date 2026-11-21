@@ -8,7 +8,7 @@ public sealed class CustomerService(ICustomerRepository repository) : ICustomerS
 {
     private readonly ICustomerRepository _repository = repository;
 
-    public async Task<CustomerResponse?> CreateAsync(CustomerRequest request, CancellationToken cancellationToken)
+    public async Task<CustomerResponse?> CreateAsync(CustomerRequest request, CancellationToken cancellationToken = default)
     {
         var customer = new Customer(request.Name, request.Email, request.Phone, request.Address);
 
@@ -16,7 +16,7 @@ public sealed class CustomerService(ICustomerRepository repository) : ICustomerS
         return created is null ? null : CustomerResponse.FromModel(created);
     }
 
-    public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+    public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         if (id <= 0)
         {
@@ -25,13 +25,13 @@ public sealed class CustomerService(ICustomerRepository repository) : ICustomerS
         return _repository.TryDeleteAsync(id, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<CustomerResponse>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<CustomerResponse>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var customers = await _repository.GetAllAsync(cancellationToken);
         return [.. customers.Select(CustomerResponse.FromModel)];
     }
 
-    public async Task<CustomerDetailResponse?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    public async Task<CustomerDetailResponse?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         if (id <= 0)
         {
@@ -53,7 +53,7 @@ public sealed class CustomerService(ICustomerRepository repository) : ICustomerS
             [.. customer.Products.Select(product => new CustomerProductResponse(product.ProductCode, product.Name))]);
     }
 
-    public async Task<CustomerResponse?> UpdateAsync(int id, UpdateCustomerRequest request, CancellationToken cancellationToken)
+    public async Task<CustomerResponse?> UpdateAsync(int id, UpdateCustomerRequest request, CancellationToken cancellationToken = default)
     {
         var customer = new Customer(request.Name, request.Email, request.Phone, request.Address);
 

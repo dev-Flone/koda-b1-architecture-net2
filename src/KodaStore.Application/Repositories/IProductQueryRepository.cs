@@ -4,5 +4,5 @@ namespace KodaStore.Application.Repositories;
 
 public interface IProductQueryRepository
 {
-    Task<PagedResult<ProductSearchItemResponse>> SearchAsync(ProductSearchCriteria criteria, CancellationToken cancellationToken);
+    Task<PagedResult<ProductSearchItemResponse>> SearchAsync(ProductSearchCriteria criteria, CancellationToken cancellationToken = default);
 }

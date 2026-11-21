@@ -9,7 +9,7 @@ namespace KodaStore.Infrastructure.Identity;
 public class IdentityAuthService(UserManager<AppUser> user) : IAuthService
 {
     private readonly UserManager<AppUser> _user = user;
-    public async Task<LoginResult> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
+    public async Task<LoginResult> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var email = request.Email.Trim();
@@ -26,7 +26,7 @@ public class IdentityAuthService(UserManager<AppUser> user) : IAuthService
         return new LoginResult(true, response);
     }
 
-    public async Task<RegisterResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
+    public async Task<RegisterResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var email = request.Email.Trim();

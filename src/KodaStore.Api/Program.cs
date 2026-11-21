@@ -1,8 +1,12 @@
 ﻿using KodaStore.Api.Middlewares;
-using KodaStore.Application.Repositories;
-using KodaStore.Infrastructure.Repositories;
 using Scalar.AspNetCore;
 using KodaStore.Infrastructure;
+using KodaStore.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +18,7 @@ builder.Services.AddCors(option =>
 {
     option.AddPolicy("ReactClient", policy =>
     {
-        policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+        policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
     });
 });
 
@@ -25,7 +29,26 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Add services to the container.
+var jwtOption = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() ?? throw new InvalidOperationException("JWT Configuration not available.");
+
+if (string.IsNullOrWhiteSpace(jwtOption.Issuer)) throw new InvalidOperationException("Jwt: Issuer is required.");
+
+if (string.IsNullOrWhiteSpace(jwtOption.Audience)) throw new InvalidOperationException("Jwt: Audience is required.");
+
+if (jwtOption.AccessTokenMinutes is < 1 or > 60) throw new InvalidOperationException("Jwt: Access Token minutes between 1 - 60");
+
+byte[] signingKeyBytes;
+try
+{
+    signingKeyBytes = Convert.FromBase64String(jwtOption.SigningKeyBase64);
+}
+catch (FormatException e)
+{
+    throw new InvalidOperationException("Jwt: SigningKeyBase64 didnt use valid base64.", e);
+}
+
+// HS256
+if (signingKeyBytes.Length < 32) throw new InvalidOperationException("JWT signing key minimum of 32 bytes");
 
 builder.Services.AddControllersWithViews();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -50,24 +73,94 @@ builder.Services.AddCors(options =>
     });
 });
 
-// EfCore (SQL Server)
-builder.Services.AddScoped<IProductRepository, EfProductRepository>();
-builder.Services.AddScoped<IOrderRepository, EfOrderRepository>();
-builder.Services.AddScoped<IProductQueryRepository, EfProductQueryRepository>();
+builder.Services.AddRateLimiter(option =>
+{
+    option.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    option.AddConcurrencyLimiter("category-writes", limiter =>
+    {
+        limiter.PermitLimit = 8;
+        limiter.QueueLimit = 0;
+    });
 
-// Sql-Client
-builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
-builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
-// builder.Services.AddScoped<IProductRepository, SqlProductRepository>();
-// builder.Services.AddScoped<ICustomerRepository, SqlCustomerRepository>();
-// builder.Services.AddScoped<IProductImageStorage, LocalProductImageStorage>();
+    option.AddPolicy("auth-login", context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "Nihil";
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: $"login: {ip}",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(3),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }
+        );
+    });
+
+    option.AddPolicy("auth-register", context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "Nihil";
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: $"login: {ip}",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(10),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }
+        );
+    });
+
+    option.AddPolicy("auth-refresh", context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "Nihil";
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: $"login: {ip}",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(2),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }
+        );
+    });
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.MapInboundClaims = false;
+    option.IncludeErrorDetails = false;
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtOption.Issuer,
+
+        ValidateAudience = true,
+        ValidAudience = jwtOption.Audience,
+
+        IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes),
+        RequireSignedTokens = true,
+        ValidAlgorithms = [
+                SecurityAlgorithms.HmacSha256
+            ],
+
+        ValidateLifetime = true,
+        RequireExpirationTime = true,
+        ClockSkew = TimeSpan.Zero,
+        NameClaimType = JwtRegisteredClaimNames.Sub,
+        RoleClaimType = "role"
+    };
+});
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Service
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -85,6 +178,9 @@ else
 app.UseMiddleware<RequestTiming>();
 
 app.UseCors("ReactClient");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

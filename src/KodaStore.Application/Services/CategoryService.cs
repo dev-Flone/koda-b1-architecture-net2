@@ -6,7 +6,7 @@ namespace KodaStore.Application.Services;
 public sealed class CategoryService(ICategoryRepository repository) : ICategoryService
 {
     private readonly ICategoryRepository _repository = repository;
-    public Task<CategoryAssignStatus> AssignProductAsync(string productCode, AssignedProductCategoryRequest request, CancellationToken cancellationToken)
+    public Task<CategoryAssignStatus> AssignProductAsync(string productCode, AssignedProductCategoryRequest request, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(productCode) || productCode.Trim().Length > 30) throw new ArgumentException("Product Code is not valid.");
 
@@ -15,7 +15,7 @@ public sealed class CategoryService(ICategoryRepository repository) : ICategoryS
         return _repository.AssignProductCompareAndSwapAsync(productCode.Trim().ToUpperInvariant(), request.NewCategoryId, request.ExpectedCategoryId, cancellationToken);
     }
 
-    public Task<CategoryCreateResult> CreateWithProductAsync(CreateCategoryProductRequest request, CancellationToken cancellationToken)
+    public Task<CategoryCreateResult> CreateWithProductAsync(CreateCategoryProductRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         if (string.IsNullOrWhiteSpace(request.Name) || request.Name.Trim().Length > 30) throw new ArgumentException("Category Name is required.");
@@ -29,14 +29,14 @@ public sealed class CategoryService(ICategoryRepository repository) : ICategoryS
         return _repository.CreateWithProductAsync(request.Name.Trim(), codes, cancellationToken);
     }
 
-    public Task<ProductCategoryStateResponse?> GetProductAssignmentAsync(string productCode, CancellationToken cancellationToken)
+    public Task<ProductCategoryStateResponse?> GetProductAssignmentAsync(string productCode, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(productCode) || productCode.Trim().Length > 30) throw new ArgumentException("Product Code is not valid.");
 
         return _repository.GetProductAssignmentAsync(productCode.Trim().ToUpperInvariant(), cancellationToken);
     }
 
-    public Task<CategoryProductsResponse?> GetProductAsync(int categoryId, int page, int pageSize, CancellationToken cancellationToken)
+    public Task<CategoryProductsResponse?> GetProductAsync(int categoryId, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         if (categoryId <= 0 || page <= 0 || pageSize is < 1 or > 50) throw new ArgumentOutOfRangeException(nameof(page), "Pagination or CategoryId is not valid.");
 
