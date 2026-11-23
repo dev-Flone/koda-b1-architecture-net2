@@ -1,17 +1,20 @@
 ﻿using KodaStore.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using KodaStore.Application.Services;
+using Microsoft.AspNetCore.Authorization;
+using KodaStore.Application.Security;
 
 namespace KodaStore.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/products")]
-
+[Authorize(Roles = AppRoles.Admin)]
 public sealed class ProductController(IProductService service) : ControllerBase
 {
     private readonly IProductService _service = service;
 
     // GET ALL
+    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<ProductResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<ProductResponse>>> GetAll(CancellationToken cancellationToken)
@@ -76,6 +79,7 @@ public sealed class ProductController(IProductService service) : ControllerBase
     }
 
     // Get by ProductCode
+    [AllowAnonymous]
     [HttpGet("{productCode}")]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

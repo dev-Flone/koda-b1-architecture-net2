@@ -63,7 +63,8 @@ public sealed class RefreshTokenService(AppDbContext context, UserManager<AppUse
         var identityUser = await userManager.FindByIdAsync(currentToken.UserId.ToString("D"));
         if (identityUser is null || string.IsNullOrWhiteSpace(identityUser.Email)) return null!;
 
-        var user = new AuthUserResponse(identityUser.Id, identityUser.Email, identityUser.DisplayName);
+        var roles = await userManager.GetRolesAsync(identityUser);
+        var user = new AuthUserResponse(identityUser.Id, identityUser.Email, identityUser.DisplayName, [.. roles]);
         var nextRawToken = GenerateToken();
         var nextExpiresAt = now.Add(RefreshLifetime);
         var nextAccessToken = jwtTokenService.IssueAccessToken(user);

@@ -1,11 +1,21 @@
-import LoginPage from "./pages/loginPage";
-import RegisterPage from "./pages/registerPage";
+import { Navigate, Route, Routes } from "react-router";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 export default function App() {
   return (
-    <>
-      <LoginPage />
-      <RegisterPage />
-    </>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   );
 }

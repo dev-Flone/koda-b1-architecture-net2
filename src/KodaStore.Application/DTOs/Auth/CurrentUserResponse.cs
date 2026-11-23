@@ -1,3 +1,3 @@
 namespace KodaStore.Application.DTOs.Auth;
 
-public sealed record CurrentUserResponse(Guid Id, string Email);
+public sealed record CurrentUserResponse(Guid Id, string Email, IReadOnlyList<string> Roles);
