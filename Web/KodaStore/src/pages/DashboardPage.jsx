@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import RoleNavigation from "../components/Navigation/RoleNavigation";
 
 const getErr = (err, fallback) =>
   err instanceof Error ? err.message : fallback;
@@ -76,6 +77,7 @@ export default function DashboardPage() {
               Welcome, {user?.displayName ?? "User"}
             </p>
           </div>
+          <RoleNavigation />
           <button
             type="button"
             onClick={handleLogout}

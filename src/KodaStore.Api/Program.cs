@@ -8,6 +8,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
+using KodaStore.Infrastructure.Seeding;
+using Microsoft.Extensions.Options;
+using KodaStore.Application.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -158,6 +161,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AppPolicies.CanManageCategory, policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole(AppRoles.Admin);
+    });
+
+    options.AddPolicy(AppPolicies.CanManageProduct, policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole(AppRoles.Admin);
+    });
+});
+
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Service
@@ -178,7 +196,7 @@ if (app.Environment.IsDevelopment())
 
     var bootstrapAdminEmail = app.Configuration["RoleBootstrap:AdminEmail"];
 
-
+    await RoleSeedData.SeedAsync(roleManager, userManager, bootstrapAdminEmail);
 }
 else
 {

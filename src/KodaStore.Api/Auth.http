@@ -5,9 +5,9 @@ POST {{baseUrl}}/api/v1/auth/register
 Content-Type: application/json
 
 {
-    "email": "limit@gmail.com",
-    "password": "Qwe123!!",
-    "displayName": "Budi Sasonto"
+    "email": "kairn1@gmail.com",
+    "password": "Admin#0506",
+    "displayName": "Kairn"
 }
 
 ### Login
@@ -15,8 +15,8 @@ POST {{baseUrl}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "limit@gmail.com",
-    "password": "Qwe123!!"
+    "email": "kairn1@gmail.com",
+    "password": "Admin#0506"
 }
 
 ### PRoduct

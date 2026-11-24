@@ -3,7 +3,6 @@
 namespace KodaStore.Application.DTOs;
 
 public record ProductRequest(
-    [Required, Range(1, int.MaxValue)]
     int CustomerId,
 
     [Required, StringLength(30)]
@@ -13,7 +12,7 @@ public record ProductRequest(
     string Name,
 
     [Required, Range(typeof(long), "0", "9999999999")]
-    long Price,
+    decimal Price,
 
     [Required, Range(0, int.MaxValue)]
     int Stock,

@@ -8,7 +8,7 @@ export class ApiError extends Error {
   }
 }
 
-async function apiRequest(
+export async function apiRequest(
   path,
   { method = "GET", credentials = "omit", headers, body } = {},
 ) {
