@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using KodaStore.Infrastructure.Seeding;
 using Microsoft.Extensions.Options;
 using KodaStore.Application.Security;
+using KodaStore.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -176,6 +177,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Service

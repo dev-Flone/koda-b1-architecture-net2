@@ -8,27 +8,32 @@ using Microsoft.Extensions.Logging;
 
 namespace KodaStore.Infrastructure.Repositories;
 
-public sealed class EfCategoryRepository(AppDbContext context, ILogger<EfCategoryRepository> logger) : ICategoryRepository
+public sealed class EfCategoryRepository(AppDbContext context) : ICategoryRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly ILogger<EfCategoryRepository> _logger = logger;
+    public void Add(Category category)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        _context.Category.Add(category);
+    }
 
-    public async Task<CategoryAssignStatus> AssignProductCompareAndSwapAsync(string productCode, int newCategoryId, int? expectedCategoryId, CancellationToken cancellationToken)
+    public async Task<CategoryAssignStatus> AssignProductCompareAndSwapAsync(string productCode, int NewCategoryId, int? expectedCategoryId, CancellationToken cancellationToken = default)
     {
         var newCategory = await _context.Category.AsNoTracking()
-            .Where(c => c.Id == newCategoryId)
+            .Where(c => c.Id == NewCategoryId)
             .Select(c => new { c.Name })
             .SingleOrDefaultAsync(cancellationToken);
 
         if (newCategory is null) return CategoryAssignStatus.CategoryNotFound;
 
         int updated;
-
         try
         {
             updated = await _context.Products
-                            .Where(p => p.ProductCode == productCode && p.CategoryId == expectedCategoryId)
-                            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.CategoryId, newCategoryId).SetProperty(p => p.Category, newCategory.Name), cancellationToken);
+                .Where(p => p.ProductCode == productCode && p.CategoryId == expectedCategoryId)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(p => p.CategoryId, NewCategoryId)
+                    .SetProperty(p => p.Category, newCategory.Name), cancellationToken);
         }
         catch (SqlException ex) when (ex.Number == 547)
         {
@@ -37,88 +42,41 @@ public sealed class EfCategoryRepository(AppDbContext context, ILogger<EfCategor
 
         if (updated == 1) return CategoryAssignStatus.Updated;
 
-        bool exists = await _context.Products.AsNoTracking()
-            .AnyAsync(p => p.ProductCode == productCode, cancellationToken);
+        bool exists = await _context.Products.AsNoTracking().AnyAsync(p => p.ProductCode == productCode, cancellationToken);
 
-        return exists ? CategoryAssignStatus.Conflict : CategoryAssignStatus.ProductNotFound;
+        return exists ? CategoryAssignStatus.Conflict : CategoryAssignStatus.CategoryNotFound;
     }
 
-    public async Task<CategoryCreateResult> CreateWithProductAsync(string name, IReadOnlyList<string> productCodes, CancellationToken cancellationToken)
+    public Task<CategoryCreateResult> CreateWithProductAsync(string name, IReadOnlyList<string> productCodes, CancellationToken cancellationToken = default)
     {
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-
-        try
-        {
-            if (await _context.Category.AnyAsync(c => c.Name == name, cancellationToken)) return new CategoryCreateResult(CategoryCreateStatus.DuplicateName, Detail: "Category Name already registered.");
-
-            var category = new Category(name);
-            _context.Category.Add(category);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            var products = await _context.Products.Where(p => productCodes.Contains(p.ProductCode)).ToListAsync(cancellationToken);
-
-            if (products.Count != productCodes.Count)
-            {
-                await transaction.RollbackAsync(cancellationToken);
-
-                return new CategoryCreateResult(CategoryCreateStatus.ProductNotFound, Detail: "One or more ProductCode Not found.");
-            }
-
-            foreach (var product in products) product.AssignCategory(category);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return new CategoryCreateResult(CategoryCreateStatus.Created, new CategoryCreatedReponse(category.Id, category.Name, [.. productCodes]));
-        }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            await transaction.RollbackAsync(CancellationToken.None);
-            _logger.LogWarning(ex, "Concurren category assignment detected.");
-            return new CategoryCreateResult(CategoryCreateStatus.Conflict, Detail: "Product chanded. Reload the data.");
-        }
-
-        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
-        {
-            await transaction.RollbackAsync(CancellationToken.None);
-            return new CategoryCreateResult(CategoryCreateStatus.DuplicateName, Detail: "Category with this name already created.");
-        }
-
-        catch
-        {
-            await transaction.RollbackAsync(CancellationToken.None);
-            throw;
-        }
+        throw new NotImplementedException();
     }
 
-    public async Task<ProductCategoryStateResponse?> GetProductAssignmentAsync(string productCode, CancellationToken cancellationToken)
+    public Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken)
     {
-        var state = await _context.Products.AsNoTracking()
-            .Where(p => p.ProductCode == productCode)
-            .Select(p => new
-            {
-                p.ProductCode,
-                p.CategoryId,
-                CategoryName = p.CategoryEntity == null ? null : p.CategoryEntity.Name,
-                p.RowVersion
-            })
-            .SingleOrDefaultAsync(cancellationToken);
-        return state is null ? null : new ProductCategoryStateResponse(
-            state.ProductCode, state.CategoryId, state.CategoryName,
-            Convert.ToBase64String(state.RowVersion));
+        return _context.Category.AsNoTracking().AnyAsync(category => category.Name == name, cancellationToken);
     }
 
-    public async Task<CategoryProductsResponse?> GetProductAsync(int categoryId, int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<ProductCategoryStateResponse?> GetProductAssignmentAsync(string productCode, CancellationToken cancellationToken = default)
+    {
+        var state = await _context.Products.AsNoTracking().Where(p => p.ProductCode == productCode).Select(p => new
+        {
+            p.ProductCode,
+            p.CategoryId,
+            categoryName = p.CategoryEntity == null ? null : p.CategoryEntity.Name,
+            p.RowVersion
+        }).SingleOrDefaultAsync(cancellationToken);
+
+        return state is null ? null : new ProductCategoryStateResponse(state.ProductCode, state.CategoryId, state.categoryName, Convert.ToBase64String(state.RowVersion));
+    }
+
+    public async Task<CategoryProductsResponse?> GetProductAsync(int categoryId, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var category = await _context.Category.AsNoTracking()
-                .Where(c => c.Id == categoryId)
-                .Select(c => new
-                {
-                    c.Id,
-                    c.Name
-                })
-                .SingleOrDefaultAsync(cancellationToken);
+            .Where(c => c.Id == categoryId)
+            .Select(c => new { c.Id, c.Name })
+            .SingleOrDefaultAsync(cancellationToken);
+
         if (category is null) return null;
 
         var query = _context.Products.AsNoTracking()
@@ -128,10 +86,16 @@ public sealed class EfCategoryRepository(AppDbContext context, ILogger<EfCategor
 
         var items = await query.OrderBy(p => p.ProductCode)
             .Skip((page - 1) * pageSize).Take(pageSize)
-            .Select(p => new CategoryProductResponse(p.ProductCode, p.Name, p.Price, p.Stock, p.CategoryEntity!.Name)).ToArrayAsync(cancellationToken);
+            .Select(p => new CategoryProductResponse(
+                p.ProductCode, p.Name, p.Price, p.Stock, p.CategoryEntity!.Name
+            )).ToArrayAsync(cancellationToken);
 
-        return new CategoryProductsResponse(category.Id, category.Name,
-         page, pageSize, totalCount, items);
+        return new CategoryProductsResponse(category.Id, category.Name, page, pageSize, totalCount, items);
+    }
+
+    public async Task<IReadOnlyList<Product>> GetProductsForAssignmentAsync(IReadOnlyList<string> productCode, CancellationToken cancellationToken)
+    {
+        return await _context.Products.AsNoTracking().Where(p => productCode.Contains(p.ProductCode)).ToListAsync(cancellationToken);
     }
 }
 

@@ -1,7 +1,9 @@
+using KodaStore.Application.Abstractions.Persistence;
 using KodaStore.Application.Repositories;
 using KodaStore.Application.Services;
 using KodaStore.Infrastructure.Data;
 using KodaStore.Infrastructure.Identity;
+using KodaStore.Infrastructure.Persistence;
 using KodaStore.Infrastructure.Repositories;
 using KodaStore.Infrastructure.Seeding;
 using Microsoft.AspNetCore.Identity;
@@ -36,15 +38,11 @@ public static class DepedencyInjection
                  await CategorySeedData.SeedAsync(context, ct);
              });
         });
-        services.AddScoped<IProductQueryService, ProductQueryService>();
-        services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<ICustomerService, CustomerService>();
-        services.AddScoped<ICategoryService, CategoryService>();
+
         services.AddScoped<IAuthService, IdentityAuthService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-
-
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IProductRepository, EfProductRepository>();
         services.AddScoped<IOrderRepository, EfOrderRepository>();

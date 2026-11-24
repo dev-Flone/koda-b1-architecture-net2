@@ -17,8 +17,8 @@ public sealed class Product(int customerId, string productCode, string name, dec
     public int? CategoryId { get; private set; } = null!;
     public bool IsActive { get; private set; } = true;
     public DateTime? DeactivatedAtUtc { get; private set; }
-    public string Category { get; private set; } = category;
-    public Category CategoryEntity { get; private set; } = null!;
+    public string Category { get; private set; } = string.Empty;
+    public Category? CategoryEntity { get; private set; } = null!;
     public byte[] RowVersion { get; private set; } = [];
     public Customer? Customer { get; private set; }
     public ICollection<OrderItem> OrderItems { get; private set; } = [];
