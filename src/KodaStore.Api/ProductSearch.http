@@ -5,7 +5,7 @@ GET {{baseUrl}}/api/v1/products/search
 Accept: application/json
 
 ### Test 2 Text Awalan
-GET {{baseUrl}}/api/v1/products/search?search=Product Dummy 4
+GET {{baseUrl}}/api/v1/products/search?search=Screen
 Accept: application/json
 
 ### Test 3 - Category dan Harga

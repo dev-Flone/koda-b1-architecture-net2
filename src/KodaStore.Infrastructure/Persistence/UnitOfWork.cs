@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace KodaStore.Infrastructure.Persistence;
 
-public class UnitOfWork(AppDbContext context, ILogger logger) : IUnitOfWork
+public class UnitOfWork(AppDbContext context, ILogger<UnitOfWork> logger) : IUnitOfWork
 {
     public async Task<IUnitOfWorkTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
     {
