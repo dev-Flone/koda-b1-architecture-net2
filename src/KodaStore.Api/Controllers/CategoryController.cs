@@ -50,7 +50,7 @@ public sealed class CategoryController(ICategoryService service) : ControllerBas
         {
             CategoryCreateStatus.Created => CreatedAtAction(nameof(GetProducts), new { categoryId = result.Data!.CategoryId }, result.Data),
             CategoryCreateStatus.ProductNotFound => NotFound(new ProblemDetails { Title = result.Detail, Status = 404 }),
-            CategoryCreateStatus.DuplicateName => Conflict(new ProblemDetails { Title = result.Detail, Status = 429 }),
+            CategoryCreateStatus.DuplicateName => Conflict(new ProblemDetails { Title = result.Detail, Status = 409 }),
             CategoryCreateStatus.Conflict => Conflict(new ProblemDetails { Title = result.Detail, Status = 409 }),
             _ => StatusCode(500)
         };

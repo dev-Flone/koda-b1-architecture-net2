@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using KodaStore.Domain.Exceptions;
 
 namespace KodaStore.Domain.Entities;
 
@@ -34,7 +35,7 @@ public sealed class Order
 
     public void Confirmation()
     {
-        if (Status != "Pending") throw new InvalidOperationException("Hanya order pending yang boleh konfirmasi");
+        if (Status != "Pending") throw new OrderStateException("Hanya order pending yang boleh konfirmasi");
 
         Status = "Confirmed";
 
